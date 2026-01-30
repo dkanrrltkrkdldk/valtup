@@ -115,6 +115,28 @@ export const mockRouletteParticipation: RouletteParticipationResponse = {
   cancelledAt: null,
 };
 
+export const mockRouletteParticipations: RouletteParticipationResponse[] = [
+  mockRouletteParticipation,
+  {
+    id: 2,
+    userId: 3,
+    userNickname: 'another_user',
+    date: '2024-01-15',
+    pointAmount: 300,
+    createdAt: '2024-01-15T11:00:00Z',
+    cancelledAt: '2024-01-15T12:00:00Z',
+  },
+  {
+    id: 3,
+    userId: 4,
+    userNickname: 'third_user',
+    date: '2024-01-15',
+    pointAmount: 800,
+    createdAt: '2024-01-15T14:00:00Z',
+    cancelledAt: null,
+  },
+];
+
 // Helper to create paginated response
 export function createPageResponse<T>(
   content: T[],
