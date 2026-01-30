@@ -205,24 +205,26 @@
 ## 6. 배포
 
 ### 6.1 데이터베이스
-- [ ] Neon PostgreSQL 설정 (또는 다른 서비스)
-- [ ] 프로덕션 DB 연결 설정
+- [x] Render PostgreSQL 설정 (render.yaml에 정의)
+- [x] 프로덕션 DB 연결 설정 (환경변수 기반)
 
 ### 6.2 백엔드 배포
-- [ ] Render/Railway 설정
-- [ ] 환경변수 설정
-- [ ] Swagger UI 접근 확인
+- [x] Render 설정 (render.yaml, Dockerfile)
+- [x] 환경변수 설정 (application.yml prod profile)
+- [x] Spring Boot Actuator 건강 체크 추가
+- [ ] 실제 배포 및 Swagger UI 접근 확인 (배포 후)
 
 ### 6.3 프론트엔드 배포
-- [ ] 사용자 웹: Vercel 배포
-- [ ] 어드민 웹: Vercel 배포
-- [ ] 환경변수 설정 (API URL)
+- [x] 사용자 웹: Vercel 설정 (vercel.json)
+- [x] 어드민 웹: Vercel 설정 (vercel.json)
+- [x] 환경변수 설정 (API URL)
+- [ ] 실제 배포 확인 (배포 후)
 
 ### 6.4 CI/CD (필수: 백엔드)
-- [ ] `.github/workflows/ci.yml` 작성
-  - [ ] Push 시 빌드 트리거
-  - [ ] 테스트 실행
-  - [ ] 자동 배포
+- [x] `.github/workflows/ci.yml` 작성
+  - [x] Push 시 빌드 트리거 (main, develop)
+  - [x] 테스트 실행 (backend, web-admin, web-user)
+  - [x] 자동 배포 (Render, Vercel)
 
 ---
 
