@@ -1,0 +1,104 @@
+# ============================================
+# Root Level
+# ============================================
+.DS_Store
+*.log
+*.tmp
+.env
+.env.local
+.env.*.local
+
+# IDE
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+
+# ============================================
+# Backend (Spring Boot / Kotlin / Gradle)
+# ============================================
+backend/.gradle/
+backend/build/
+backend/out/
+backend/bin/
+backend/*.jar
+backend/*.war
+
+# Gradle Wrapper (optional - can be committed)
+# backend/gradle/wrapper/gradle-wrapper.jar
+
+# ============================================
+# Frontend (Next.js / React / Node.js)
+# ============================================
+node_modules/
+.next/
+.nuxt/
+dist/
+out/
+*.tsbuildinfo
+
+# Next.js
+web-user/.next/
+web-user/out/
+web-user/node_modules/
+
+# Vite / React Admin
+web-admin/dist/
+web-admin/node_modules/
+
+# Package manager
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.pnpm-store/
+
+# ============================================
+# Flutter / Dart
+# ============================================
+mobile/.dart_tool/
+mobile/.flutter-plugins
+mobile/.flutter-plugins-dependencies
+mobile/.packages
+mobile/.pub-cache/
+mobile/.pub/
+mobile/build/
+mobile/*.iml
+mobile/.metadata
+
+# iOS
+mobile/ios/Pods/
+mobile/ios/.symlinks/
+mobile/ios/Flutter/Flutter.framework
+mobile/ios/Flutter/Flutter.podspec
+mobile/ios/Flutter/Generated.xcconfig
+mobile/ios/Flutter/ephemeral/
+mobile/ios/Flutter/app.flx
+mobile/ios/Flutter/app.zip
+mobile/ios/Flutter/flutter_assets/
+mobile/ios/ServiceDefinitions.json
+mobile/ios/Runner/GeneratedPluginRegistrant.*
+
+# Android
+mobile/android/.gradle/
+mobile/android/app/build/
+mobile/android/build/
+mobile/android/local.properties
+mobile/android/key.properties
+mobile/android/*.jks
+
+# ============================================
+# Testing & Coverage
+# ============================================
+coverage/
+*.lcov
+.nyc_output/
+
+# ============================================
+# Production
+# ============================================
+*.apk
+*.aab
+*.ipa
+*.app
