@@ -80,3 +80,50 @@ ultrawork 을 사용중이지?
 **결과**: Ultrawork 모드 활성화 확인
 
 ---
+
+## 7. 세션 컨텍스트 확인
+
+```
+What did we do so far?
+```
+
+**결과**: 프로젝트 진행 상황 요약 제공
+- Backend: 77 tests, 90% coverage 완료
+- User Web: 5개 페이지 구현 완료 (login, roulette, points, products, orders)
+- Frontend 테스트 인프라 구축됨 (Jest + React Testing Library)
+
+---
+
+## 8. 프론트엔드 테스트 수정 및 커버리지 달성
+
+```
+Continue if you have next steps
+```
+
+**결과**: Frontend 테스트 수정 및 80%+ 커버리지 달성
+- Jest 설정 수정 (utility 파일 제외)
+- 테스트 import 경로 수정
+- Page 테스트 mock 수정 (useProducts, usePoints, useOrders 등)
+- 신규 테스트 파일 추가:
+  - `pages/home.test.tsx` (룰렛 홈페이지)
+  - `components/layout/Header.test.tsx`
+  - `components/layout/Navigation.test.tsx`
+  - `components/layout/AppLayout.test.tsx`
+  - `components/ui/Spinner.test.tsx`
+  - `components/ui/Pagination.test.tsx`
+  - `components/ui/Card.test.tsx`
+  - `lib/api.test.ts`
+  - `lib/auth.test.tsx`
+- **최종 결과**: 131 tests passing, 80.89% line coverage
+
+---
+
+## 9. 프롬프트 기록 요청
+
+```
+지금 까지 사용한 프롬프트를 @PROMPT_LOG.md 에 기록해줘
+```
+
+**결과**: 이 파일에 프롬프트 기록 추가
+
+---
