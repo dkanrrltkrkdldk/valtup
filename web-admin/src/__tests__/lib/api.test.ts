@@ -11,7 +11,7 @@ import {
 
 // Mock fetch globally
 const mockFetch = vi.fn();
-global.fetch = mockFetch;
+(globalThis as { fetch: typeof fetch }).fetch = mockFetch;
 
 describe('ApiError', () => {
   it('creates error with correct properties', () => {
