@@ -1,0 +1,31 @@
+services:
+  - type: web
+    name: point-roulette-api
+    runtime: docker
+    region: singapore
+    plan: free
+    branch: main
+    rootDir: backend
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /actuator/health
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+      - key: DATABASE_URL
+        fromDatabase:
+          name: point-roulette-db
+          property: connectionString
+      - key: DATABASE_USERNAME
+        fromDatabase:
+          name: point-roulette-db
+          property: user
+      - key: DATABASE_PASSWORD
+        fromDatabase:
+          name: point-roulette-db
+          property: password
+
+databases:
+  - name: point-roulette-db
+    databaseName: pointroulette
+    plan: free
+    region: singapore
