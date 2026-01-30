@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   Card,
@@ -18,9 +18,12 @@ import {
 import { adminApi } from '@/lib/api';
 import type { AdminOrderResponse } from '@/types/api';
 
+type StatusFilter = 'ALL' | 'COMPLETED' | 'CANCELLED';
+
 export function OrdersPage() {
   const queryClient = useQueryClient();
   const [page, setPage] = useState(0);
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>('ALL');
   const [cancellingOrder, setCancellingOrder] = useState<AdminOrderResponse | null>(null);
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
@@ -29,6 +32,12 @@ export function OrdersPage() {
     queryKey: ['orders', page],
     queryFn: () => adminApi.getOrders(page, 10),
   });
+
+  const filteredContent = useMemo(() => {
+    if (!data?.content) return [];
+    if (statusFilter === 'ALL') return data.content;
+    return data.content.filter(order => order.status === statusFilter);
+  }, [data?.content, statusFilter]);
 
   const cancelMutation = useMutation({
     mutationFn: adminApi.cancelOrder,
@@ -49,6 +58,10 @@ export function OrdersPage() {
     }
   }, [successMessage]);
 
+  useEffect(() => {
+    setPage(0);
+  }, [statusFilter]);
+
   const showSuccess = (msg: string) => {
     setSuccessMessage(msg);
     setErrorMessage('');
@@ -58,6 +71,10 @@ export function OrdersPage() {
     if (cancellingOrder) {
       cancelMutation.mutate(cancellingOrder.id);
     }
+  };
+
+  const handleFilterChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setStatusFilter(e.target.value as StatusFilter);
   };
 
   const formatDateTime = (dateString: string) => {
@@ -96,10 +113,21 @@ export function OrdersPage() {
 
       <Card>
         <CardHeader>
-          <h2 className="text-lg font-semibold text-gray-900">전체 주문</h2>
+          <div className="flex items-center justify-between">
+            <h2 className="text-lg font-semibold text-gray-900">전체 주문</h2>
+            <select
+              value={statusFilter}
+              onChange={handleFilterChange}
+              className="px-3 py-1.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            >
+              <option value="ALL">전체</option>
+              <option value="COMPLETED">완료</option>
+              <option value="CANCELLED">취소됨</option>
+            </select>
+          </div>
         </CardHeader>
         <CardBody>
-          {data?.content.length === 0 ? (
+          {filteredContent.length === 0 ? (
             <p className="text-center text-gray-500 py-8">주문 내역이 없습니다.</p>
           ) : (
             <Table>
@@ -116,7 +144,7 @@ export function OrdersPage() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {data?.content.map((order) => (
+                {filteredContent.map((order) => (
                   <TableRow key={order.id}>
                     <TableCell>#{order.id}</TableCell>
                     <TableCell>{order.userNickname}</TableCell>
