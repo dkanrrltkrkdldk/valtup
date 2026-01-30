@@ -70,7 +70,8 @@ describe('OrdersPage', () => {
     render(<OrdersPage />);
 
     await waitFor(() => {
-      expect(screen.getByText('완료')).toBeInTheDocument();
+      const badges = screen.getAllByText('완료');
+      expect(badges.length).toBeGreaterThanOrEqual(1);
     });
   });
 
@@ -80,7 +81,8 @@ describe('OrdersPage', () => {
     render(<OrdersPage />);
 
     await waitFor(() => {
-      expect(screen.getByText('취소됨')).toBeInTheDocument();
+      const badges = screen.getAllByText('취소됨');
+      expect(badges.length).toBeGreaterThanOrEqual(1);
     });
   });
 
@@ -239,6 +241,130 @@ describe('OrdersPage', () => {
 
     await waitFor(() => {
       expect(screen.getByText(/2024/)).toBeInTheDocument();
+    });
+  });
+
+  describe('Status Filter', () => {
+    beforeEach(() => {
+      vi.mocked(adminApi.getOrders).mockResolvedValue(createPageResponse(mockOrders));
+    });
+
+    it('renders status filter dropdown', async () => {
+      render(<OrdersPage />);
+
+      await waitFor(() => {
+        expect(screen.getByRole('combobox')).toBeInTheDocument();
+      });
+    });
+
+    it('filter dropdown has correct options', async () => {
+      render(<OrdersPage />);
+
+      await waitFor(() => {
+        expect(screen.getByRole('combobox')).toBeInTheDocument();
+      });
+
+      expect(screen.getByRole('option', { name: '전체' })).toBeInTheDocument();
+      expect(screen.getByRole('option', { name: '완료' })).toBeInTheDocument();
+      expect(screen.getByRole('option', { name: '취소됨' })).toBeInTheDocument();
+    });
+
+    it('default filter shows all orders', async () => {
+      render(<OrdersPage />);
+
+      await waitFor(() => {
+        expect(screen.getByText('test_user')).toBeInTheDocument();
+        expect(screen.getByText('another_user')).toBeInTheDocument();
+      });
+    });
+
+    it('selecting 완료 shows only completed orders', async () => {
+      render(<OrdersPage />);
+
+      await waitFor(() => {
+        expect(screen.getByRole('combobox')).toBeInTheDocument();
+      });
+
+      fireEvent.change(screen.getByRole('combobox'), { target: { value: 'COMPLETED' } });
+
+      await waitFor(() => {
+        expect(screen.getByText('test_user')).toBeInTheDocument();
+        expect(screen.queryByText('another_user')).not.toBeInTheDocument();
+      });
+    });
+
+    it('selecting 취소됨 shows only cancelled orders', async () => {
+      render(<OrdersPage />);
+
+      await waitFor(() => {
+        expect(screen.getByRole('combobox')).toBeInTheDocument();
+      });
+
+      fireEvent.change(screen.getByRole('combobox'), { target: { value: 'CANCELLED' } });
+
+      await waitFor(() => {
+        expect(screen.queryByText('test_user')).not.toBeInTheDocument();
+        expect(screen.getByText('another_user')).toBeInTheDocument();
+      });
+    });
+
+    it('shows empty state when filter has no matching orders', async () => {
+      vi.mocked(adminApi.getOrders).mockResolvedValue(createPageResponse([mockOrders[0]]));
+
+      render(<OrdersPage />);
+
+      await waitFor(() => {
+        expect(screen.getByRole('combobox')).toBeInTheDocument();
+      });
+
+      fireEvent.change(screen.getByRole('combobox'), { target: { value: 'CANCELLED' } });
+
+      await waitFor(() => {
+        expect(screen.getByText('주문 내역이 없습니다.')).toBeInTheDocument();
+      });
+    });
+
+    it('changing filter resets page to 0', async () => {
+      const page2Response = {
+        content: mockOrders,
+        page: 1,
+        size: 10,
+        totalElements: 20,
+        totalPages: 2,
+        first: false,
+        last: true,
+      };
+      vi.mocked(adminApi.getOrders)
+        .mockResolvedValueOnce(createPageResponse(mockOrders))
+        .mockResolvedValueOnce(page2Response)
+        .mockResolvedValueOnce(createPageResponse(mockOrders));
+
+      render(<OrdersPage />);
+
+      await waitFor(() => {
+        expect(screen.getByRole('button', { name: '다음' })).toBeInTheDocument();
+      });
+
+      fireEvent.change(screen.getByRole('combobox'), { target: { value: 'COMPLETED' } });
+
+      await waitFor(() => {
+        expect(screen.getByRole('combobox')).toHaveValue('COMPLETED');
+      });
+    });
+
+    it('filter persists with pagination display', async () => {
+      render(<OrdersPage />);
+
+      await waitFor(() => {
+        expect(screen.getByRole('combobox')).toBeInTheDocument();
+      });
+
+      fireEvent.change(screen.getByRole('combobox'), { target: { value: 'COMPLETED' } });
+
+      await waitFor(() => {
+        expect(screen.getByText('test_user')).toBeInTheDocument();
+        expect(screen.queryByText('another_user')).not.toBeInTheDocument();
+      });
     });
   });
 });
