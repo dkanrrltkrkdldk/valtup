@@ -502,3 +502,154 @@ cd backend
 
 **Test Report Location**:
 - HTML: `backend/build/reports/tests/test/index.html`
+
+---
+
+## Phase 4: Web Admin Implementation
+
+**Date**: 2025-01-30
+**Status**: Completed
+**Methodology**: Test-Driven Development with Vitest + Playwright E2E
+
+---
+
+### 4.1 Common Setup
+
+| Task | Status | Details |
+|------|--------|---------|
+| API Client | Done | `lib/api.ts` - fetch wrapper with auth headers |
+| Layout | Done | `AdminLayout.tsx` + `Sidebar.tsx` |
+| UI Components | Done | Button, Card, Badge, Input, Modal, Table, Spinner |
+| Auth Context | Done | `lib/auth.tsx` - AuthProvider with role check |
+
+**UI Components Created**:
+```
+src/components/
+├── layout/
+│   ├── AdminLayout.tsx
+│   └── Sidebar.tsx
+└── ui/
+    ├── Badge.tsx
+    ├── Button.tsx
+    ├── Card.tsx
+    ├── Input.tsx
+    ├── Modal.tsx
+    ├── Spinner.tsx
+    ├── Table.tsx
+    └── index.ts
+```
+
+---
+
+### 4.2 Admin Pages Implementation
+
+| Page | Route | Features |
+|------|-------|----------|
+| LoginPage | `/login` | Nickname input, admin login |
+| DashboardPage | `/` | Budget card, participants, points stats |
+| BudgetPage | `/budget` | View/edit daily budget |
+| ProductsPage | `/products` | CRUD with modal forms, pagination |
+| OrdersPage | `/orders` | List with cancel, pagination |
+
+**Files Created**:
+```
+src/pages/
+├── LoginPage.tsx
+├── DashboardPage.tsx
+├── BudgetPage.tsx
+├── ProductsPage.tsx
+└── OrdersPage.tsx
+```
+
+---
+
+### 4.3 Unit Tests (Vitest)
+
+| Test File | Tests | Coverage |
+|-----------|-------|----------|
+| api.test.ts | 21 | 100% |
+| auth.test.tsx | 11 | 95.83% |
+| AdminLayout.test.tsx | 9 | 100% |
+| Sidebar.test.tsx | 11 | 100% |
+| Button.test.tsx | 15 | 100% |
+| Card.test.tsx | 10 | 100% |
+| Badge.test.tsx | 9 | 100% |
+| Input.test.tsx | 12 | 100% |
+| Modal.test.tsx | 9 | 100% |
+| Table.test.tsx | 20 | 100% |
+| Spinner.test.tsx | 10 | 100% |
+| LoginPage.test.tsx | 12 | 100% |
+| DashboardPage.test.tsx | 9 | 100% |
+| BudgetPage.test.tsx | 9 | 96.55% |
+| ProductsPage.test.tsx | 19 | 59.25% |
+| OrdersPage.test.tsx | 15 | 61.9% |
+| **Total** | **201** | **82.29%** |
+
+---
+
+### 4.4 E2E Tests (Playwright)
+
+| Spec File | Tests | Coverage |
+|-----------|-------|----------|
+| auth.spec.ts | 7 | Login, redirects, navigation |
+| dashboard.spec.ts | 5 | Title, cards, numeric values |
+| budget.spec.ts | 6 | Display, form, update |
+| products.spec.ts | 10 | CRUD, modal, pagination |
+| orders.spec.ts | 10 | List, cancel, pagination |
+| **Total** | **38** | All admin pages |
+
+**Page Object Models**:
+```
+e2e/pages/
+├── base.page.ts
+├── login.page.ts
+├── dashboard.page.ts
+├── budget.page.ts
+├── products.page.ts
+└── orders.page.ts
+```
+
+**Auth Fixture**:
+```
+e2e/fixtures/
+└── auth.fixture.ts
+```
+
+---
+
+### npm Scripts Added
+
+```json
+{
+  "test": "vitest run",
+  "test:watch": "vitest",
+  "test:coverage": "vitest run --coverage",
+  "e2e": "playwright test",
+  "e2e:ui": "playwright test --ui",
+  "e2e:headed": "playwright test --headed",
+  "e2e:debug": "playwright test --debug"
+}
+```
+
+---
+
+### Test Summary
+
+| Category | Tests | Status |
+|----------|-------|--------|
+| Unit Tests (Vitest) | 201 | ✅ ALL PASS |
+| E2E Tests (Playwright) | 38 | ✅ Configured |
+| **Total** | **239** | **✅** |
+
+**Coverage**: 82.29% (target: 80%) ✅
+
+---
+
+### Notes for Next Phase
+
+1. **Remaining Admin Tasks**:
+   - [ ] 룰렛 참여 내역 테이블 (BudgetPage)
+   - [ ] 참여 취소 기능 (BudgetPage)
+   - [ ] 주문 상태 변경 (OrdersPage)
+
+2. **Next Phase**: Phase 5 - Flutter Mobile App
