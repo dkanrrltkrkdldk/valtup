@@ -23,14 +23,17 @@ class PointService(
     @Transactional(readOnly = true)
     fun getBalance(userId: Long): BalanceResult {
         val now = LocalDateTime.now(kst)
+        val expiryThreshold = now.plusDays(EXPIRY_WARNING_DAYS)
         val validPoints = pointRepository.findValidPointsByUserId(userId, now)
 
         val balance = validPoints.sumOf { it.availableAmount() }
-        val validPointsCount = validPoints.size
+        val expiringIn7Days = validPoints
+            .filter { it.expiresAt.isBefore(expiryThreshold) }
+            .sumOf { it.availableAmount() }
 
         return BalanceResult(
             balance = balance,
-            validPointsCount = validPointsCount
+            expiringIn7Days = expiringIn7Days
         )
     }
 
@@ -55,7 +58,7 @@ class PointService(
 
 data class BalanceResult(
     val balance: Int,
-    val validPointsCount: Int
+    val expiringIn7Days: Int
 )
 
 data class ExpiringPointsResult(

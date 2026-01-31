@@ -3,13 +3,13 @@ package com.pointroulette.api.point
 import com.pointroulette.application.point.BalanceResult
 
 data class BalanceResponse(
-    val balance: Int,
-    val validPointsCount: Int
+    val totalBalance: Int,
+    val expiringIn7Days: Int
 ) {
     companion object {
         fun from(result: BalanceResult) = BalanceResponse(
-            balance = result.balance,
-            validPointsCount = result.validPointsCount
+            totalBalance = result.balance,
+            expiringIn7Days = result.expiringIn7Days
         )
     }
 }
