@@ -81,10 +81,14 @@ class RouletteService(
         val budget = dailyBudgetRepository.findByDate(today)
             ?: DailyBudget.createForDate(today)
 
+        val hasParticipated = participation != null
+        val remaining = budget.remainingBudget()
+        
         return RouletteStatus(
-            hasParticipatedToday = participation != null,
-            remainingBudget = budget.remainingBudget(),
-            todayWonPoints = participation?.pointAmount
+            hasParticipatedToday = hasParticipated,
+            remainingBudget = remaining,
+            todayWonPoints = participation?.pointAmount,
+            canParticipate = !hasParticipated && remaining > 0
         )
     }
 
@@ -103,5 +107,6 @@ data class SpinResult(
 data class RouletteStatus(
     val hasParticipatedToday: Boolean,
     val remainingBudget: Int,
-    val todayWonPoints: Int?
+    val todayWonPoints: Int?,
+    val canParticipate: Boolean
 )
