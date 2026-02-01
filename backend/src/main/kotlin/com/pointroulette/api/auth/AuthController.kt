@@ -41,4 +41,11 @@ class AuthController(
         val user = authService.findById(userId)
         return ResponseEntity.ok(UserResponse.from(user))
     }
+
+    @Operation(summary = "Logout")
+    @PostMapping("/logout")
+    fun logout(session: HttpSession): ResponseEntity<Void> {
+        session.invalidate()
+        return ResponseEntity.noContent().build()
+    }
 }

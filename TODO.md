@@ -196,8 +196,8 @@
 - [x] 스플래시 스크린 (설정 완료, PNG 변환 필요)
 
 ### 5.3 빌드
-- [ ] Android APK 빌드 (Flutter SDK 필요)
-- [ ] iOS 시뮬레이터 동작 확인 (Flutter SDK 필요)
+- [x] Android APK 빌드 (완료: mobile/point-roulette.apk, 40MB)
+- [x] iOS 시뮬레이터 빌드 (완료: build/ios/iphonesimulator/Runner.app)
 - [ ] (선택) iOS 실기기/TestFlight 빌드
 
 ---
@@ -252,6 +252,6 @@
 - [ ] 사용자 웹 배포 URL (배포 후)
 - [ ] 어드민 웹 배포 URL (배포 후)
 - [ ] 백엔드 Swagger UI URL (배포 후)
-- [ ] Flutter APK 파일 (Flutter SDK 필요)
+- [x] Flutter APK 파일 (mobile/point-roulette.apk, 40MB)
 - [x] CI/CD 설정 파일 포함 확인
 - [x] PROMPT.md 작성 완료

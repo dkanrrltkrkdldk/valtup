@@ -4,7 +4,13 @@ import 'package:flutter/services.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 
-const String kWebAppUrl = 'https://point-roulette.vercel.app';
+// Production URL (배포 후 사용)
+// const String kWebAppUrl = 'https://point-roulette.vercel.app';
+
+// Local development URL (로컬 테스트용)
+// iOS Simulator: localhost 사용
+// Android Emulator: 10.0.2.2 사용
+const String kWebAppUrl = 'http://localhost:3000';
 const Color kPrimaryColor = Color(0xFF6366F1);
 
 void main() {
@@ -42,8 +48,8 @@ class WebViewScreen extends StatefulWidget {
 
 class _WebViewScreenState extends State<WebViewScreen> {
   late WebViewController _controller;
-  late StreamSubscription<List<ConnectivityResult>> _connectivitySubscription;
-  
+  late StreamSubscription<ConnectivityResult> _connectivitySubscription;
+
   bool _isLoading = true;
   bool _hasError = false;
   bool _isOffline = false;
@@ -71,14 +77,13 @@ class _WebViewScreenState extends State<WebViewScreen> {
 
   void _initConnectivity() {
     _connectivitySubscription = Connectivity().onConnectivityChanged.listen(
-      (results) {
-        final isOffline = results.isEmpty || 
-            results.every((r) => r == ConnectivityResult.none);
-        
+      (result) {
+        final isOffline = result == ConnectivityResult.none;
+
         if (_isOffline && !isOffline) {
           _retry();
         }
-        
+
         setState(() => _isOffline = isOffline);
       },
     );
@@ -107,7 +112,7 @@ class _WebViewScreenState extends State<WebViewScreen> {
   }
 
   void _onHttpError(HttpResponseError error) {
-    if (error.response?.statusCode != null && 
+    if (error.response?.statusCode != null &&
         error.response!.statusCode >= 500) {
       setState(() {
         _isLoading = false;
