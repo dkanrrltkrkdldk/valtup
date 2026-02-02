@@ -127,3 +127,112 @@ Continue if you have next steps
 **결과**: 이 파일에 프롬프트 기록 추가
 
 ---
+
+## 10. Flutter 5.3 빌드 요청
+
+```
+@TODO.md 의 5.3 빌드를 수행해줘 ulw
+```
+
+**결과**:
+- Flutter SDK 설치 (Homebrew)
+- Android SDK 설치 및 설정 (SDK 36, build-tools, platform-tools)
+- Gradle/AGP 업그레이드 (8.3→8.9, 8.1.0→8.7.0)
+- SVG→PNG 앱 아이콘 변환 (librsvg 사용)
+- connectivity_plus API 변경 대응
+- Android APK 빌드 성공 (40MB)
+
+---
+
+## 11. Xcode 설치 후 iOS 빌드
+
+```
+Xcode 를 설치했어 ulw
+```
+
+**결과**:
+- CocoaPods 설치 (Homebrew)
+- iOS 시뮬레이터 런타임 다운로드 (iOS 26.2, 7.8GB)
+- iOS 시뮬레이터 빌드 성공 (Runner.app)
+
+---
+
+## 12. Flutter 앱 연결 오류 디버깅
+
+```
+연결오류 가 뜨는데 원인을 찾아줘. 서버는 로컬의 8080에서 실행중이야
+```
+
+**결과**:
+- iOS App Transport Security (ATS) 설정 추가
+- Info.plist에 NSAllowsArbitraryLoads, NSAllowsLocalNetworking 추가
+
+---
+
+## 13. 포트 변경 요청
+
+```
+8080번 포트로 접속해줘
+```
+
+**결과**: Flutter WebView URL을 localhost:8080으로 변경
+
+---
+
+## 14. 로그인 실패 디버깅
+
+```
+앱에 처음 로그인 화면까지는 잘 나오는데 이름을 입력했을때 로그인에 실패하는데?
+```
+
+**결과**:
+- CORS 설정에 127.0.0.1 추가 (localhost:* 및 127.0.0.1:* 패턴)
+- 백엔드 WebConfig.kt 수정
+
+---
+
+## 15. 룰렛 동작 오류 디버깅
+
+```
+룰랫 화면은 나오고 있어. 다만 룰랫 돌리기가 안되고 있어
+```
+
+**결과**:
+- 127.0.0.1과 localhost의 origin 불일치 문제 발견
+- Flutter URL을 localhost:3000으로 통일하여 세션 쿠키 전달 문제 해결
+
+---
+
+## 16. 로그아웃 오류 수정
+
+```
+로그아웃이 안되고 있어
+```
+
+**결과**:
+- 백엔드에 logout 엔드포인트가 없는 것 발견
+- AuthController.kt에 `/api/auth/logout` POST 엔드포인트 추가
+
+---
+
+## 17. 커밋 요청
+
+```
+지금 까지 작업내역 commit해줘
+```
+
+**결과**:
+- 63개 파일 변경, 1836 라인 추가
+- 커밋: `0c9c8d4 feat(mobile): Complete Flutter build for Android and iOS`
+
+---
+
+## 18. 문서 기록 요청
+
+```
+사용했던 프롬프트를 @PROMPT_LOG.md 에 기록하고, 작업내역을 @TASK_RECORD.md 에 기록해줘
+```
+
+**결과**: PROMPT_LOG.md 및 TASK_RECORD.md 업데이트
+
+---
