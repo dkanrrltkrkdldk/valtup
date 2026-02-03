@@ -205,20 +205,21 @@
 ## 6. 배포
 
 ### 6.1 데이터베이스
-- [x] Render PostgreSQL 설정 (render.yaml에 정의)
+- [x] Railway PostgreSQL 설정
 - [x] 프로덕션 DB 연결 설정 (환경변수 기반)
 
 ### 6.2 백엔드 배포
-- [x] Render 설정 (render.yaml, Dockerfile)
+- [x] Railway 배포 완료
 - [x] 환경변수 설정 (application.yml prod profile)
 - [x] Spring Boot Actuator 건강 체크 추가
-- [ ] 실제 배포 및 Swagger UI 접근 확인 (배포 후)
+- [x] 실제 배포 완료: https://valtup-production.up.railway.app
+- [x] Swagger UI: https://valtup-production.up.railway.app/swagger-ui.html
 
 ### 6.3 프론트엔드 배포
-- [x] 사용자 웹: Vercel 설정 (vercel.json)
-- [x] 어드민 웹: Vercel 설정 (vercel.json)
-- [x] 환경변수 설정 (API URL)
-- [ ] 실제 배포 확인 (배포 후)
+- [x] 사용자 웹: Vercel 배포 완료: https://valtup-web-user.vercel.app
+- [x] 어드민 웹: Vercel 배포 완료: https://valtup-web-admin.vercel.app
+- [x] 환경변수 설정 (API URL, BACKEND_URL)
+- [x] API Proxy 설정 (WebView cross-domain cookie 문제 해결)
 
 ### 6.4 CI/CD (필수: 백엔드)
 - [x] `.github/workflows/ci.yml` 작성
@@ -248,10 +249,10 @@
 
 ## 8. 제출 체크리스트
 
-- [x] GitHub 저장소 URL (로컬 완성)
-- [ ] 사용자 웹 배포 URL (배포 후)
-- [ ] 어드민 웹 배포 URL (배포 후)
-- [ ] 백엔드 Swagger UI URL (배포 후)
+- [x] GitHub 저장소 URL
+- [x] 사용자 웹 배포 URL: https://valtup-web-user.vercel.app
+- [x] 어드민 웹 배포 URL: https://valtup-web-admin.vercel.app
+- [x] 백엔드 Swagger UI URL: https://valtup-production.up.railway.app/swagger-ui.html
 - [x] Flutter APK 파일 (mobile/point-roulette.apk, 40MB)
 - [x] CI/CD 설정 파일 포함 확인
 - [x] PROMPT.md 작성 완료

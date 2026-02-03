@@ -213,10 +213,10 @@ Push to `main` branch triggers:
 
 | Service | URL |
 |---------|-----|
-| User Web | TBD |
-| Admin Web | TBD |
-| Backend API | TBD |
-| Swagger UI | TBD |
+| User Web | https://valtup-web-user.vercel.app |
+| Admin Web | https://valtup-web-admin.vercel.app |
+| Backend API | https://valtup-production.up.railway.app |
+| Swagger UI | https://valtup-production.up.railway.app/swagger-ui.html |
 
 ## Key Features
 
