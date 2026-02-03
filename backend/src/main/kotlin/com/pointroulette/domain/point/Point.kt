@@ -62,5 +62,7 @@ class Point(
 
         const val MIN_POINTS = 100
         const val MAX_POINTS = 1000
+        
+        val POINT_VALUES = listOf(100, 200, 300, 400, 500, 600, 700, 800, 900, 1000)
     }
 }

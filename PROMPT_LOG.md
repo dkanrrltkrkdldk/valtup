@@ -236,3 +236,81 @@ Xcode 를 설치했어 ulw
 **결과**: PROMPT_LOG.md 및 TASK_RECORD.md 업데이트
 
 ---
+
+## 19. 세션 요약 요청
+
+```
+What did we do so far?
+```
+
+**결과**: 이전 세션 작업 요약 제공
+- Backend: Railway 배포 완료 (https://valtup-production.up.railway.app)
+- web-user: Vercel 배포 완료 (https://valtup-web-user.vercel.app)
+- web-admin: Vercel 배포 완료 (https://valtup-web-admin.vercel.app)
+- Cross-domain cookie 문제 해결 (SameSite=None, spring-session-jdbc)
+- 87개 백엔드 테스트 통과
+
+---
+
+## 20. 모바일 앱 Production WebView 테스트 요청
+
+```
+지금 모바일 앱의 prod 를 사용해서 WebView로 렌더링이 잘 수행되고 있는지 확인해줘
+```
+
+**결과**:
+- mobile/lib/main.dart URL을 production으로 변경
+- iOS 시뮬레이터에서 WebView 렌더링 정상 확인
+- 로그인 화면 UI 요소 정상 표시 확인
+
+---
+
+## 21. WebView 0P 표시 문제 보고
+
+```
+앱을 켰을때 보유포인트나 남은 예산이 아예 0p 로 나와
+```
+
+**결과**:
+- 원인: iOS WebView에서 cross-domain cookie 차단 (vercel.app → railway.app)
+- 해결: Next.js API Proxy 구현 (/api/proxy/[...path])
+- 커밋: 
+  - `259f341` fix(web-user): Add API proxy to fix WebView cross-domain cookie issue
+  - `76cd001` fix(web-user): Remove unsupported credentials option from server-side fetch
+- Same-origin으로 cookie 문제 해결
+
+---
+
+## 22. 프록시 적용 후 정상 작동 확인
+
+```
+Shine으로 로그인 하니 99,324P로 표시되고 있어
+```
+
+**결과**: WebView에서 API 프록시 통해 정상 작동 확인
+- 보유 포인트, 오늘 남은 예산 정상 표시
+- Cross-domain cookie 문제 완전 해결
+
+---
+
+## 23. 커밋 상태 확인
+
+```
+commit이 된건가?
+```
+
+**결과**: 커밋 및 push 완료 확인
+- `76cd001` fix(web-user): Remove unsupported credentials option from server-side fetch
+- `259f341` fix(web-user): Add API proxy to fix WebView cross-domain cookie issue
+
+---
+
+## 24. 프롬프트 기록 요청
+
+```
+지금까지 내가 입력한 프롬프트를 모두 @PROMPT_LOG.md 에 기록해줘
+```
+
+**결과**: 이 파일에 프롬프트 기록 추가
+
+---

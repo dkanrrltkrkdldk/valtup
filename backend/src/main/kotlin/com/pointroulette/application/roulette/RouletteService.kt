@@ -47,12 +47,13 @@ class RouletteService(
             message = "아쉽게도 꽝입니다! 내일 다시 도전해주세요."
         } else {
             val maxPossiblePoints = minOf(Point.MAX_POINTS, budget.remainingBudget())
+            val availablePoints = Point.POINT_VALUES.filter { it <= maxPossiblePoints }
             
-            if (maxPossiblePoints < Point.MIN_POINTS) {
+            if (availablePoints.isEmpty()) {
                 pointsWon = 0
                 message = "아쉽게도 꽝입니다! 내일 다시 도전해주세요."
             } else {
-                pointsWon = Random.nextInt(Point.MIN_POINTS, maxPossiblePoints + 1)
+                pointsWon = availablePoints.random()
                 budget.usePoints(pointsWon)
                 dailyBudgetRepository.save(budget)
 
