@@ -13,6 +13,7 @@ export default function HomePage() {
   const [isSpinning, setIsSpinning] = useState(false);
   const [showResult, setShowResult] = useState(false);
   const [result, setResult] = useState<{ pointAmount: number; isWin: boolean } | null>(null);
+  const [targetValue, setTargetValue] = useState<number | null>(null);
 
   const { data: status, isLoading: statusLoading, refetch: refetchStatus } = useRouletteStatus();
   const { data: balance, refetch: refetchBalance } = usePointBalance();
@@ -21,18 +22,22 @@ export default function HomePage() {
   const handleSpin = useCallback(async () => {
     if (isSpinning || !status?.canParticipate) return;
 
-    setIsSpinning(true);
     try {
       const res = await spinMutation.mutateAsync();
+      setTargetValue(res.pointAmount);
+      setResult({ pointAmount: res.pointAmount, isWin: res.isWin });
+      setIsSpinning(true);
+      
       setTimeout(() => {
-        setResult({ pointAmount: res.pointAmount, isWin: res.isWin });
         setShowResult(true);
         setIsSpinning(false);
+        setTargetValue(null);
         refetchStatus();
         refetchBalance();
       }, 4000);
     } catch {
       setIsSpinning(false);
+      setTargetValue(null);
     }
   }, [isSpinning, status?.canParticipate, spinMutation, refetchStatus, refetchBalance]);
 
@@ -84,7 +89,7 @@ export default function HomePage() {
         </Card>
 
         <div className="mb-8">
-          <RouletteWheel isSpinning={isSpinning} onSpinEnd={handleSpinEnd} />
+          <RouletteWheel isSpinning={isSpinning} targetValue={targetValue} onSpinEnd={handleSpinEnd} />
         </div>
 
         <div className="text-center">

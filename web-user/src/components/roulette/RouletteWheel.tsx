@@ -1,9 +1,10 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 interface RouletteWheelProps {
   isSpinning: boolean;
+  targetValue?: number | null;
   onSpinEnd?: () => void;
 }
 
@@ -20,21 +21,49 @@ const SEGMENTS = [
   { value: 1000, color: '#F1948A' },
 ];
 
-export function RouletteWheel({ isSpinning, onSpinEnd }: RouletteWheelProps) {
+const SEGMENT_ANGLE = 360 / SEGMENTS.length;
+
+function calculateTargetRotation(targetValue: number, currentRotation: number): number {
+  const targetIndex = SEGMENTS.findIndex((s) => s.value === targetValue);
+  if (targetIndex === -1) return currentRotation + 360 * 5;
+
+  const targetSegmentCenter = targetIndex * SEGMENT_ANGLE + SEGMENT_ANGLE / 2;
+  const stopAngle = 360 - targetSegmentCenter;
+  const fullSpins = 360 * 5;
+  const currentNormalized = currentRotation % 360;
+  let additionalRotation = stopAngle - currentNormalized;
+  
+  if (additionalRotation < 0) {
+    additionalRotation += 360;
+  }
+  
+  return currentRotation + fullSpins + additionalRotation;
+}
+
+export function RouletteWheel({ isSpinning, targetValue, onSpinEnd }: RouletteWheelProps) {
   const [rotation, setRotation] = useState(0);
+  const prevSpinningRef = useRef(false);
 
   useEffect(() => {
-    if (isSpinning) {
-      const spinDegrees = 360 * 5 + Math.random() * 360;
-      setRotation((prev) => prev + spinDegrees);
+    if (isSpinning && !prevSpinningRef.current) {
+      const newRotation = targetValue
+        ? calculateTargetRotation(targetValue, rotation)
+        : rotation + 360 * 5 + Math.random() * 360;
+      
+      setRotation(newRotation);
 
       const timer = setTimeout(() => {
         onSpinEnd?.();
       }, 4000);
 
+      prevSpinningRef.current = true;
       return () => clearTimeout(timer);
     }
-  }, [isSpinning, onSpinEnd]);
+    
+    if (!isSpinning) {
+      prevSpinningRef.current = false;
+    }
+  }, [isSpinning, targetValue, onSpinEnd, rotation]);
 
   const segmentAngle = 360 / SEGMENTS.length;
 
