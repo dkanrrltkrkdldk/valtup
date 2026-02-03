@@ -23,9 +23,11 @@ class PointAcceptanceTest : AcceptanceTest() {
 
     @BeforeEach
     fun cleanup() {
-        runCatching {
-            jdbcTemplate.execute("TRUNCATE TABLE roulette_participations, points, daily_budgets, users RESTART IDENTITY CASCADE")
-        }
+        jdbcTemplate.execute("DELETE FROM roulette_participations")
+        jdbcTemplate.execute("DELETE FROM points")
+        jdbcTemplate.execute("DELETE FROM orders")
+        jdbcTemplate.execute("DELETE FROM daily_budgets")
+        jdbcTemplate.execute("DELETE FROM users")
     }
 
     private fun loginAndGetSession(nickname: String): String {

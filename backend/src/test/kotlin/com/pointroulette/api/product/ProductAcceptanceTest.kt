@@ -22,9 +22,8 @@ class ProductAcceptanceTest : AcceptanceTest() {
 
     @BeforeEach
     fun cleanup() {
-        runCatching {
-            jdbcTemplate.execute("TRUNCATE TABLE products RESTART IDENTITY CASCADE")
-        }
+        jdbcTemplate.execute("DELETE FROM orders")
+        jdbcTemplate.execute("DELETE FROM products")
     }
 
     private fun createProduct(
