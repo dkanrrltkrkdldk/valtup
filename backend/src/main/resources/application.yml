@@ -73,6 +73,13 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
 
+server:
+  servlet:
+    session:
+      cookie:
+        same-site: none
+        secure: true
+
 springdoc:
   swagger-ui:
     path: /swagger-ui.html
