@@ -53,7 +53,6 @@ async function proxyRequest(request: NextRequest, path: string[]) {
   const fetchOptions: RequestInit = {
     method: request.method,
     headers,
-    credentials: 'include',
     body,
   };
 
