@@ -14,7 +14,6 @@ object TestPostgresContainer {
         .withDatabaseName("pointroulette_test")
         .withUsername("test")
         .withPassword("test")
-        .withReuse(true)
 
     init {
         instance.start()
