@@ -118,10 +118,17 @@ class AdminAcceptanceTest : AcceptanceTest() {
 
     private fun createDailyBudget(date: LocalDate, totalBudget: Int, usedBudget: Int): Long {
         jdbcTemplate.update(
-            "INSERT INTO daily_budgets (date, total_budget, used_budget) VALUES (?, ?, ?)",
+            """
+            INSERT INTO daily_budgets (date, total_budget, used_budget) VALUES (?, ?, ?)
+            ON CONFLICT (date) DO UPDATE SET total_budget = EXCLUDED.total_budget, used_budget = EXCLUDED.used_budget
+            """.trimIndent(),
             date, totalBudget, usedBudget
         )
-        return jdbcTemplate.queryForObject("SELECT lastval()", Long::class.java)!!
+        return jdbcTemplate.queryForObject(
+            "SELECT id FROM daily_budgets WHERE date = ?",
+            Long::class.java,
+            date
+        )!!
     }
 
     private fun getProductStock(productId: Long): Int {

@@ -145,8 +145,7 @@ class PointAcceptanceTest : AcceptanceTest() {
                 .get("/api/points/balance")
             .then()
                 .statusCode(200)
-                .body("balance", equalTo(800))
-                .body("validPointsCount", equalTo(2))
+                .body("totalBalance", equalTo(800))
         }
 
         @Test
@@ -168,7 +167,7 @@ class PointAcceptanceTest : AcceptanceTest() {
                 .get("/api/points/balance")
             .then()
                 .statusCode(200)
-                .body("balance", equalTo(300))
+                .body("totalBalance", equalTo(300))
         }
 
         @Test

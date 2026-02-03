@@ -10,7 +10,7 @@ data class SpinResponse(
     companion object {
         fun from(result: SpinResult) = SpinResponse(
             pointAmount = result.pointsWon,
-            isWin = result.success,
+            isWin = result.pointsWon > 0,
             message = result.message
         )
     }

@@ -166,7 +166,10 @@ class ConcurrencyTest : AcceptanceTest() {
             // Given: 잔여 예산 500p (총 예산 100,000p 중 99,500p 사용)
             val today = LocalDate.now(KST)
             jdbcTemplate.update(
-                "INSERT INTO daily_budgets (date, total_budget, used_budget) VALUES (?, ?, ?)",
+                """
+                INSERT INTO daily_budgets (date, total_budget, used_budget) VALUES (?, ?, ?)
+                ON CONFLICT (date) DO UPDATE SET total_budget = EXCLUDED.total_budget, used_budget = EXCLUDED.used_budget
+                """.trimIndent(),
                 today, 100000, 99500
             )
 
@@ -194,8 +197,8 @@ class ConcurrencyTest : AcceptanceTest() {
                             .extract()
 
                         if (response.statusCode() == 200) {
-                            val pointsWon = response.path<Int>("pointsWon")
-                            pointsWonList.add(pointsWon)
+                            val pointAmount = response.path<Int>("pointAmount")
+                            pointsWonList.add(pointAmount)
                         }
                     } finally {
                         doneLatch.countDown()

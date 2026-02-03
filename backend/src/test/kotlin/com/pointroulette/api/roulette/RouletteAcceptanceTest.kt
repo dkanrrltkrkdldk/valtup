@@ -59,8 +59,8 @@ class RouletteAcceptanceTest : AcceptanceTest() {
                 .post("/api/roulette/spin")
             .then()
                 .statusCode(200)
-                .body("success", equalTo(true))
-                .body("pointsWon", allOf(greaterThanOrEqualTo(100), lessThanOrEqualTo(1000)))
+                .body("isWin", equalTo(true))
+                .body("pointAmount", allOf(greaterThanOrEqualTo(100), lessThanOrEqualTo(1000)))
                 .body("message", notNullValue())
         }
 
@@ -92,9 +92,12 @@ class RouletteAcceptanceTest : AcceptanceTest() {
         fun spinRoulette_budgetExhausted_returnsZeroPoints() {
             val today = LocalDate.now(KST)
             
-            // 예산 소진 설정
+            // 예산 소진 설정 (UPSERT로 기존 레코드가 있어도 안전하게 처리)
             jdbcTemplate.update(
-                "INSERT INTO daily_budgets (date, total_budget, used_budget) VALUES (?, ?, ?)",
+                """
+                INSERT INTO daily_budgets (date, total_budget, used_budget) VALUES (?, ?, ?)
+                ON CONFLICT (date) DO UPDATE SET total_budget = EXCLUDED.total_budget, used_budget = EXCLUDED.used_budget
+                """.trimIndent(),
                 today, 100000, 100000
             )
 
@@ -106,8 +109,8 @@ class RouletteAcceptanceTest : AcceptanceTest() {
                 .post("/api/roulette/spin")
             .then()
                 .statusCode(200)
-                .body("success", equalTo(true))
-                .body("pointsWon", equalTo(0))
+                .body("isWin", equalTo(false))
+                .body("pointAmount", equalTo(0))
                 .body("message", containsString("꽝"))
         }
 
@@ -156,7 +159,7 @@ class RouletteAcceptanceTest : AcceptanceTest() {
             .then()
                 .statusCode(200)
                 .extract()
-                .path<Int>("pointsWon")
+                .path<Int>("pointAmount")
 
             // 상태 조회
             given()
@@ -192,7 +195,10 @@ class RouletteAcceptanceTest : AcceptanceTest() {
             
             // 잔여 예산 500p 설정
             jdbcTemplate.update(
-                "INSERT INTO daily_budgets (date, total_budget, used_budget) VALUES (?, ?, ?)",
+                """
+                INSERT INTO daily_budgets (date, total_budget, used_budget) VALUES (?, ?, ?)
+                ON CONFLICT (date) DO UPDATE SET total_budget = EXCLUDED.total_budget, used_budget = EXCLUDED.used_budget
+                """.trimIndent(),
                 today, 100000, 99500
             )
 
@@ -214,8 +220,8 @@ class RouletteAcceptanceTest : AcceptanceTest() {
                             .extract()
 
                         if (response.statusCode() == 200) {
-                            val pointsWon = response.path<Int>("pointsWon")
-                            if (pointsWon > 0) {
+                            val pointAmount = response.path<Int>("pointAmount")
+                            if (pointAmount > 0) {
                                 successCount.incrementAndGet()
                             }
                         }
