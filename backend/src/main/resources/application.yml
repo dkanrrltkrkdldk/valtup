@@ -61,10 +61,8 @@ spring:
     activate:
       on-profile: prod
   datasource:
-    url: jdbc:postgresql://${PGHOST:localhost}:${PGPORT:5432}/${PGDATABASE:pointroulette}
+    url: ${DATABASE_URL}
     driver-class-name: org.postgresql.Driver
-    username: ${PGUSER:postgres}
-    password: ${PGPASSWORD:postgres}
   jpa:
     hibernate:
       ddl-auto: update
