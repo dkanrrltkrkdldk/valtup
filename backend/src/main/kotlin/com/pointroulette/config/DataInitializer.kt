@@ -8,10 +8,12 @@ import com.pointroulette.domain.user.UserRepository
 import org.slf4j.LoggerFactory
 import org.springframework.boot.ApplicationArguments
 import org.springframework.boot.ApplicationRunner
+import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 
 @Component
+@Profile("!test")
 class DataInitializer(
     private val productRepository: ProductRepository,
     private val userRepository: UserRepository
