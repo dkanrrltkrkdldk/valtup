@@ -21,8 +21,9 @@ USER appuser
 COPY --from=builder /app/build/libs/*.jar app.jar
 
 ENV JAVA_OPTS="-Xmx512m -Xms256m"
-ENV SERVER_PORT=8080
+ENV PORT=8080
+ENV SPRING_PROFILES_ACTIVE=prod
 
 EXPOSE 8080
 
-ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -Dserver.port=$SERVER_PORT -jar app.jar"]
+ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -Dserver.port=$PORT -jar app.jar"]
