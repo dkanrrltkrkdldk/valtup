@@ -13,7 +13,15 @@ import type {
   ErrorResponse,
 } from '@/types/api';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
+const USE_PROXY = typeof window !== 'undefined';
+const DIRECT_API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
+
+function getApiBaseUrl(): string {
+  if (USE_PROXY) {
+    return '/api/proxy';
+  }
+  return DIRECT_API_URL;
+}
 
 class ApiError extends Error {
   constructor(
@@ -30,7 +38,8 @@ async function fetchApi<T>(
   endpoint: string,
   options: RequestInit = {}
 ): Promise<T> {
-  const url = `${API_BASE_URL}${endpoint}`;
+  const apiPath = endpoint.replace(/^\/api/, '');
+  const url = `${getApiBaseUrl()}${apiPath}`;
 
   const response = await fetch(url, {
     ...options,

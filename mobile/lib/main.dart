@@ -4,13 +4,13 @@ import 'package:flutter/services.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 
-// Production URL (배포 후 사용)
-// const String kWebAppUrl = 'https://point-roulette.vercel.app';
+// Production URL
+const String kWebAppUrl = 'https://valtup-web-user.vercel.app';
 
 // Local development URL (로컬 테스트용)
 // iOS Simulator: localhost 사용
 // Android Emulator: 10.0.2.2 사용
-const String kWebAppUrl = 'http://localhost:3000';
+// const String kWebAppUrl = 'http://localhost:3000';
 const Color kPrimaryColor = Color(0xFF6366F1);
 
 void main() {
@@ -76,17 +76,17 @@ class _WebViewScreenState extends State<WebViewScreen> {
   }
 
   void _initConnectivity() {
-    _connectivitySubscription = Connectivity().onConnectivityChanged.listen(
-      (result) {
-        final isOffline = result == ConnectivityResult.none;
+    _connectivitySubscription = Connectivity().onConnectivityChanged.listen((
+      result,
+    ) {
+      final isOffline = result == ConnectivityResult.none;
 
-        if (_isOffline && !isOffline) {
-          _retry();
-        }
+      if (_isOffline && !isOffline) {
+        _retry();
+      }
 
-        setState(() => _isOffline = isOffline);
-      },
-    );
+      setState(() => _isOffline = isOffline);
+    });
   }
 
   void _onPageStarted() {
@@ -146,9 +146,7 @@ class _WebViewScreenState extends State<WebViewScreen> {
       },
       child: Scaffold(
         backgroundColor: kPrimaryColor,
-        body: SafeArea(
-          child: _buildBody(),
-        ),
+        body: SafeArea(child: _buildBody()),
       ),
     );
   }
@@ -217,10 +215,7 @@ class _WebViewScreenState extends State<WebViewScreen> {
                   ? '인터넷 연결을 확인해 주세요.'
                   : '서버에 연결할 수 없습니다.\n잠시 후 다시 시도해 주세요.',
               textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.grey[600],
-              ),
+              style: TextStyle(fontSize: 16, color: Colors.grey[600]),
             ),
             const SizedBox(height: 32),
             ElevatedButton.icon(
