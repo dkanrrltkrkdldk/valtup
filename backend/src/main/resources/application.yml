@@ -41,6 +41,8 @@ spring:
       hibernate:
         format_sql: true
         dialect: org.hibernate.dialect.H2Dialect
+  session:
+    store-type: none
 
 springdoc:
   swagger-ui:
