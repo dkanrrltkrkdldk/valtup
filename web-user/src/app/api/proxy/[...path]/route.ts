@@ -58,19 +58,37 @@ async function proxyRequest(request: NextRequest, path: string[]) {
 
   try {
     const response = await fetch(targetUrl.toString(), fetchOptions);
+    
+    const setCookieHeaders = response.headers.getSetCookie();
+    
+    if (response.status === 204) {
+      const proxyResponse = new NextResponse(null, {
+        status: 204,
+        statusText: response.statusText,
+      });
+      
+      setCookieHeaders.forEach((cookie) => {
+        proxyResponse.headers.append('Set-Cookie', transformSetCookieForProxy(cookie));
+      });
+      
+      return proxyResponse;
+    }
+    
     const responseText = await response.text();
     
-    const proxyResponse = new NextResponse(responseText, {
+    const proxyResponse = new NextResponse(responseText || null, {
       status: response.status,
       statusText: response.statusText,
     });
 
-    proxyResponse.headers.set(
-      'Content-Type', 
-      response.headers.get('Content-Type') || 'application/json'
-    );
+    if (responseText) {
+      proxyResponse.headers.set(
+        'Content-Type', 
+        response.headers.get('Content-Type') || 'application/json'
+      );
+    }
     
-    response.headers.getSetCookie().forEach((cookie) => {
+    setCookieHeaders.forEach((cookie) => {
       proxyResponse.headers.append('Set-Cookie', transformSetCookieForProxy(cookie));
     });
 
