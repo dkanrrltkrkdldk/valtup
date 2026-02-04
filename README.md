@@ -1,3 +1,35 @@
+## Deployment URLs
+
+| Service | URL |
+|---------|-----|
+| User Web | https://valtup-web-user.vercel.app |
+| Admin Web | https://valtup-web-admin.vercel.app |
+| Backend API | https://valtup-production.up.railway.app |
+| Swagger UI | https://valtup-production.up.railway.app/swagger-ui.html |
+
+## 후기 기록
+일단 구현과 배포는 다 했는데, 주 평균 70 시간씩 일하는 중이라 시간이 시간이 도저히 나지 않는 상황이라 해당 과제에 저의 리소스를 투입할 여력이 없었습니다.    
+100% AI로 구현하였습니다. 과제가 어렵다기 보다는 배포랑 앱을 만들어야 해 손이 많은 과제였던것 같습니다.
+
+### 설계
+일단 돈을 안쓰는 단계에서 POC 느낌의 과제라 포인트 정합성 위한 보장만 잘 해주고, 그 외는 단순한 1대의 서버로 처리하는 로직입니다.
+
+### 문제 고민과 해결
+1. 포인트 관점
+왜 비관적 락인가? 에 대하여 사용하면서 고민을 하였습니다.    
+Point 룰렛 서비스 특성상 1일 1회 참여 제한이라 Write 빈도가 매우 낮고, 동시 요청 확률이 낮기 때문에 충돌 확률도 낮다 생각하였습니다.    
+다만 정합성을 맞춰야 할 부분이 포인트 이기 때문에 리스크가 높은 요소라 생각하였습니다. → 정합성 최우선 이라 판단    
+추가로 재시도 UX보다 대기 UX가 더 적합한게, 룰렛이 도는 시간이 있기 때문에 일정 시간 대기를 해도 충분하다 생각하였습니다!    
+따라서 PESSIMISTIC Lock 을 사용하여 예산의 정합성을 보장하였습니다.    
+
+2. 로그인 관점
+어차피 서버 1대라 StateLess하게 JWT 토큰으로 로그인 구현하는게 이상하다 생각했습니다.
+그냥 StateFULL 하게 쿠키-세션 방식으로 로그인을 구현하였습니다.
+
+### 생산성 향상
+해당 과제는 100% AI만 사용하여 구현 하였으며, 제가 작성한 코드는 0줄입니다.
+어쩌면 생산성이 100%인 경험이였다 생각합니다.
+
 # Point Roulette
 
 > 매일 룰렛을 돌려 포인트를 획득하고, 획득한 포인트로 상품을 구매하는 서비스
@@ -208,15 +240,6 @@ Push to `main` branch triggers:
 1. Backend tests → Build JAR → Deploy to Render
 2. Web Admin tests → Deploy to Vercel
 3. Web User build → Deploy to Vercel
-
-## Deployment URLs
-
-| Service | URL |
-|---------|-----|
-| User Web | https://valtup-web-user.vercel.app |
-| Admin Web | https://valtup-web-admin.vercel.app |
-| Backend API | https://valtup-production.up.railway.app |
-| Swagger UI | https://valtup-production.up.railway.app/swagger-ui.html |
 
 ## Key Features
 
