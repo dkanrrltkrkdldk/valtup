@@ -3,6 +3,10 @@ import { authApi, rouletteApi, pointApi, productApi, orderApi, ApiError } from '
 const mockFetch = jest.fn();
 global.fetch = mockFetch;
 
+// In browser environment (jsdom), API calls go through /api/proxy
+// This matches the production behavior for WebView cookie handling
+const PROXY_PREFIX = '/api/proxy';
+
 describe('API Client', () => {
   beforeEach(() => {
     mockFetch.mockClear();
@@ -19,7 +23,7 @@ describe('API Client', () => {
       const result = await authApi.login({ nickname: 'test' });
 
       expect(mockFetch).toHaveBeenCalledWith(
-        expect.stringContaining('/api/auth/login'),
+        expect.stringContaining(`${PROXY_PREFIX}/auth/login`),
         expect.objectContaining({
           method: 'POST',
           body: JSON.stringify({ nickname: 'test' }),
@@ -38,7 +42,7 @@ describe('API Client', () => {
       const result = await authApi.me();
 
       expect(mockFetch).toHaveBeenCalledWith(
-        expect.stringContaining('/api/auth/me'),
+        expect.stringContaining(`${PROXY_PREFIX}/auth/me`),
         expect.any(Object)
       );
       expect(result).toEqual(mockUser);
@@ -54,7 +58,7 @@ describe('API Client', () => {
       await authApi.logout();
 
       expect(mockFetch).toHaveBeenCalledWith(
-        expect.stringContaining('/api/auth/logout'),
+        expect.stringContaining(`${PROXY_PREFIX}/auth/logout`),
         expect.objectContaining({
           method: 'POST',
         })
@@ -73,7 +77,7 @@ describe('API Client', () => {
       const result = await rouletteApi.getStatus();
 
       expect(mockFetch).toHaveBeenCalledWith(
-        expect.stringContaining('/api/roulette/status'),
+        expect.stringContaining(`${PROXY_PREFIX}/roulette/status`),
         expect.any(Object)
       );
       expect(result).toEqual(mockStatus);
@@ -89,7 +93,7 @@ describe('API Client', () => {
       const result = await rouletteApi.spin();
 
       expect(mockFetch).toHaveBeenCalledWith(
-        expect.stringContaining('/api/roulette/spin'),
+        expect.stringContaining(`${PROXY_PREFIX}/roulette/spin`),
         expect.objectContaining({
           method: 'POST',
         })
@@ -109,7 +113,7 @@ describe('API Client', () => {
       const result = await pointApi.getPoints(1, 20);
 
       expect(mockFetch).toHaveBeenCalledWith(
-        expect.stringContaining('/api/points?page=1&size=20'),
+        expect.stringContaining(`${PROXY_PREFIX}/points?page=1&size=20`),
         expect.any(Object)
       );
       expect(result).toEqual(mockPoints);
@@ -125,7 +129,7 @@ describe('API Client', () => {
       const result = await pointApi.getBalance();
 
       expect(mockFetch).toHaveBeenCalledWith(
-        expect.stringContaining('/api/points/balance'),
+        expect.stringContaining(`${PROXY_PREFIX}/points/balance`),
         expect.any(Object)
       );
       expect(result).toEqual(mockBalance);
@@ -143,7 +147,7 @@ describe('API Client', () => {
       await productApi.getProducts();
 
       expect(mockFetch).toHaveBeenCalledWith(
-        expect.stringContaining('/api/products'),
+        expect.stringContaining(`${PROXY_PREFIX}/products`),
         expect.any(Object)
       );
     });
@@ -158,7 +162,7 @@ describe('API Client', () => {
       const result = await productApi.getProduct(1);
 
       expect(mockFetch).toHaveBeenCalledWith(
-        expect.stringContaining('/api/products/1'),
+        expect.stringContaining(`${PROXY_PREFIX}/products/1`),
         expect.any(Object)
       );
       expect(result).toEqual(mockProduct);
@@ -176,7 +180,7 @@ describe('API Client', () => {
       const result = await orderApi.createOrder({ productId: 1, quantity: 1 });
 
       expect(mockFetch).toHaveBeenCalledWith(
-        expect.stringContaining('/api/orders'),
+        expect.stringContaining(`${PROXY_PREFIX}/orders`),
         expect.objectContaining({
           method: 'POST',
           body: JSON.stringify({ productId: 1, quantity: 1 }),
@@ -195,7 +199,7 @@ describe('API Client', () => {
       await orderApi.getOrders();
 
       expect(mockFetch).toHaveBeenCalledWith(
-        expect.stringContaining('/api/orders'),
+        expect.stringContaining(`${PROXY_PREFIX}/orders`),
         expect.any(Object)
       );
     });
