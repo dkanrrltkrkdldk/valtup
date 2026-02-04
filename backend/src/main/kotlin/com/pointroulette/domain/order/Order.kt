@@ -16,6 +16,9 @@ class Order(
     @Column(nullable = false)
     val productId: Long,
 
+    @Column(nullable = false, columnDefinition = "VARCHAR(255) DEFAULT '(상품명 없음)'")
+    val productName: String = "(상품명 없음)",
+
     @Column(nullable = false)
     val quantity: Int,
 
@@ -44,6 +47,7 @@ class Order(
         fun create(
             userId: Long,
             productId: Long,
+            productName: String,
             quantity: Int,
             unitPrice: Int,
             createdAt: LocalDateTime = LocalDateTime.now()
@@ -54,6 +58,7 @@ class Order(
             return Order(
                 userId = userId,
                 productId = productId,
+                productName = productName,
                 quantity = quantity,
                 totalPrice = unitPrice * quantity,
                 status = OrderStatus.COMPLETED,

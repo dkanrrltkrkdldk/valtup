@@ -88,14 +88,15 @@ class AdminAcceptanceTest : AcceptanceTest() {
         productId: Long,
         quantity: Int,
         totalPrice: Int,
-        status: String = "COMPLETED"
+        status: String = "COMPLETED",
+        productName: String = "Test Product"
     ): Long {
         jdbcTemplate.update(
             """
-            INSERT INTO orders (user_id, product_id, quantity, total_price, status, created_at, cancelled_at)
-            VALUES (?, ?, ?, ?, ?, ?, ?)
+            INSERT INTO orders (user_id, product_id, product_name, quantity, total_price, status, created_at, cancelled_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
             """.trimIndent(),
-            userId, productId, quantity, totalPrice, status, LocalDateTime.now(KST), null
+            userId, productId, productName, quantity, totalPrice, status, LocalDateTime.now(KST), null
         )
         return jdbcTemplate.queryForObject("SELECT lastval()", Long::class.java)!!
     }
@@ -654,10 +655,10 @@ class AdminAcceptanceTest : AcceptanceTest() {
             // 이미 취소된 주문 생성
             jdbcTemplate.update(
                 """
-                INSERT INTO orders (user_id, product_id, quantity, total_price, status, created_at, cancelled_at)
-                VALUES (?, ?, ?, ?, 'CANCELLED', ?, ?)
+                INSERT INTO orders (user_id, product_id, product_name, quantity, total_price, status, created_at, cancelled_at)
+                VALUES (?, ?, ?, ?, ?, 'CANCELLED', ?, ?)
                 """.trimIndent(),
-                userId, productId, 2, 1000, LocalDateTime.now(KST), LocalDateTime.now(KST)
+                userId, productId, "상품", 2, 1000, LocalDateTime.now(KST), LocalDateTime.now(KST)
             )
             val orderId = jdbcTemplate.queryForObject("SELECT lastval()", Long::class.java)!!
 

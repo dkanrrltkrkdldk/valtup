@@ -7,6 +7,7 @@ import java.time.LocalDateTime
 data class OrderResponse(
     val id: Long,
     val productId: Long,
+    val productName: String,
     val quantity: Int,
     val totalPrice: Int,
     val status: OrderStatus,
@@ -18,6 +19,7 @@ data class OrderResponse(
             return OrderResponse(
                 id = order.id,
                 productId = order.productId,
+                productName = order.productName,
                 quantity = order.quantity,
                 totalPrice = order.totalPrice,
                 status = order.status,

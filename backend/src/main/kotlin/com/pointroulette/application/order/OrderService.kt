@@ -59,6 +59,7 @@ class OrderService(
         val order = Order.create(
             userId = userId,
             productId = productId,
+            productName = product.name,
             quantity = quantity,
             unitPrice = product.price,
             createdAt = now
