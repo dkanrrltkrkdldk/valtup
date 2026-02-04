@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.Query
 import java.util.Optional
 
 interface ProductRepository : JpaRepository<Product, Long> {
-    fun findByDeletedAtIsNull(pageable: Pageable): Page<Product>
+    fun findByDeletedAtIsNullOrderByPriceAsc(pageable: Pageable): Page<Product>
 
     fun findByIdAndDeletedAtIsNull(id: Long): Optional<Product>
 

@@ -16,7 +16,7 @@ class ProductService(
 ) {
     @Transactional(readOnly = true)
     fun getProducts(pageable: Pageable): Page<Product> {
-        return productRepository.findByDeletedAtIsNull(pageable)
+        return productRepository.findByDeletedAtIsNullOrderByPriceAsc(pageable)
     }
 
     @Transactional(readOnly = true)
